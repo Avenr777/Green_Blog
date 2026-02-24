@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write Blog | GreenBlog</title>
+
+  <!-- Link CSS -->
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <div class="logo">GreenBlog 🍃</div>
+
+    <div class="auth-buttons">
+      <a href="{% url 'home' %}" class="login-btn">🏠 Home</a>
+      <a href="{% url 'logout' %}" class="signup-btn">Logout</a>
+    </div>
+  </header>
+
+
+  <!-- Write Blog Section -->
+  <div class="write-container">
+
+    <div class="write-box">
+      <h2>✍️ Write a New Blog</h2>
+      <p>Share your thoughts with the GreenBlog community.</p>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <!-- Blog Title -->
+        <label>Blog Title</label>
+        <input type="text" name="title" placeholder="Enter blog title..." required>
+
+        <!-- Blog Content -->
+        <label>Blog Content</label>
+        <textarea name="content" rows="8" placeholder="Write your blog here..." required></textarea>
+
+        <!-- Submit Button -->
+        <button type="submit" class="auth-btn">Publish Blog</button>
+      </form>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

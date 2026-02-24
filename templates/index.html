@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenBlog Home</title>
+
+  <!-- CSS File -->
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <header>
+
+    <!-- Blog Logo -->
+    <div class="logo">GreenBlog 🍃</div>
+    <div class="nav-search">
+    <form method="GET" action="{% url 'home' %}">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Search blogs..."
+            value="{{ request.GET.q }}"
+        >
+        <button type="submit">
+            🔍
+        </button>
+    </form>
+    </div>
+    <!-- Navigation Buttons (Top Right) -->
+    <div class="auth-buttons">
+      <a href="{% url 'write' %}" class="write-btn">✍️ Write Blog</a>     
+      {% if user.is_authenticated %} 
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="login-btn">Login</a>
+        <a href="{% url 'register' %}" class="signup-btn">Sign Up</a>
+      {% endif %}
+    </div>
+
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to GreenBlog</h1>
+    <p>A peaceful place to read, explore, and write amazing blogs every day.</p>
+  </section>
+
+
+  <!-- Daily Blogs Section -->
+<section class="blog-section">
+  <h2>📖 Latest Blogs</h2>
+
+  <div class="posts">
+    {% for blog in blogs %}
+      <div class="card">
+        <h3>{{ blog.title }}</h3>
+        <p>{{ blog.content|truncatewords:20 }}</p>
+        <small>✍️ By {{ blog.author }}</small>
+        <p>❤️ {{ blog.likes }}</p>
+        <form action="{% url 'like_blog' blog.id %}" method="POST">
+          {% csrf_token %}
+          {% if user.username in blog.liked_by %}
+          <button type="submit">💔 Unlike</button>
+        {% else %}
+        <button type="submit">❤️ Like</button>
+        {% endif %}
+        </form>
+        <a href="{% url 'post_view' blog.id %}">Read More</a>
+      </div>
+    
+    {% empty %}
+      <p>No blogs posted yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+  <!-- Trending Blogs Section -->
+<section class="blog-section">
+  <h2>🔥 Trending Blogs</h2>
+{% if trending_blogs %}
+    {% for blog in trending_blogs %}
+        <div class="card">
+            <h3>{{ blog.title }}</h3>
+            <p>{{ blog.content|truncatewords:20 }}</p>  
+            <p>-By {{ blog.author }}</p>
+            <p>❤️ {{ blog.likes }} likes</p>
+            <a href="{% url 'post_view' blog.id %}">Read More</a>
+        </div>
+      {% endfor %}
+    {% else %}
+    <p>No trending blogs yet.</p>
+    {% endif %}
+</section> 
+
+  <!-- Footer -->
+  <footer>
+    © 2026 practice site 🍃 & ❤️
+  </footer>
+
+</body>
+</html>

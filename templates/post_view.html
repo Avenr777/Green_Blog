@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ blog.title }}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo"> GreenBlog 🌿</div>
+    <div class="auth-buttons">
+        <a href="{% url 'home' %}" class="login-btn">Home</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'write' %}" class="write-btn">Write</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="login-btn">Login</a>
+            <a href="{% url 'register' %}" class="signup-btn">Signup</a>
+        {% endif %}
+    </div>
+</header>
+
+<section class="blog-section">
+    <div class="post-container">
+        <div class="card trending post-card">
+
+            <h1 class="post-title">{{ blog.title }}</h1>
+
+            <p class="post-author">
+                ✍ By <strong>{{ blog.author }}</strong>
+            </p>
+
+            <p class="post-likes">
+                ❤️ {{ blog.likes }} Likes
+            </p>
+            <br>
+            <hr>
+
+            <div class="post-content">
+                {{ blog.content }}
+            </div>
+            <!-- Comment Section -->
+            <hr class="divider">
+
+            <h3 class="section-title">
+                💬 Comments
+                <span class="comment-count">{{ blog.comments|length }}</span>
+            </h3>
+
+            {% if user.is_authenticated %}
+            <button class="btn-primary" onclick="toggleCommentForm()" id="comment-toggle-btn">
+                ✍️ Write a Comment
+            </button>
+
+            <form method="POST" class="comment-form" id="comment-form">
+                {% csrf_token %}
+                <textarea name="comment" placeholder="Share your thoughts..." required></textarea>
+                <button type="submit" class="btn-primary">Post Comment</button>
+            </form>
+            {% else %}
+            <p class="login-note">Login to join the discussion.</p>
+            {% endif %}
+
+            <div class="comment-section">
+
+                {% for comment in top_comments %}
+                <div class="comment-card">
+                    <div class="comment-body-wrapper">
+                        <div class="comment-header">
+                            <span class="comment-user">{{ comment.user }}</span>
+                            <span class="comment-date">
+                                {{ comment.created_at|date:"M d, Y · h:i A" }}
+                            </span>
+                        </div>
+                        <p class="comment-text">
+                            {{ comment.content }}
+                        </p>
+                    </div>
+                    <br>
+                </div>
+                {% endfor %}
+
+                {% if remaining_comments %}
+                <div id="more-comments">
+                    {% for comment in remaining_comments %}
+                    <div class="comment-card">
+                        <div class="comment-body-wrapper">
+                            <div class="comment-header">
+                                <span class="comment-user">{{ comment.user }}</span>
+                                <span class="comment-date">
+                                    {{ comment.created_at|date:"M d, Y · h:i A" }}
+                                </span>
+                            </div>
+                            <p class="comment-text">
+                                {{ comment.content }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <button onclick="toggleComments()" class="btn-secondary" id="toggle-btn">
+                    Show More
+                </button>
+                {% endif %}
+
+            </div> <!-- closes .comment-section -->
+
+        </div> <!-- closes .card.post-card -->
+    </div> <!-- closes .post-container -->
+</section> <!-- closes .blog-section -->
+
+<br>
+<a href="{% url 'home' %}" class="back-btn" style="margin-left: 50px;">
+    ⬅ Back to Home
+</a>
+
+<footer>
+    © 2026 GreenBlog. Built with 💚 using Django + MongoDB.
+</footer>
+
+<script>
+function toggleComments() {
+    const more = document.getElementById("more-comments");
+    const btn = document.getElementById("toggle-btn");
+
+    if (more.style.display === "none" || more.style.display === "") {
+        more.style.display = "block";
+        btn.innerText = "Show Less";
+    } else {
+        more.style.display = "none";
+        btn.innerText = "Show More";
+    }
+}
+
+function toggleCommentForm() {
+    const form = document.getElementById("comment-form");
+    const button = document.getElementById("comment-toggle-btn");
+
+    if (form.style.display === "none" || form.style.display === "") {
+        form.style.display = "block";
+        button.innerHTML = "✖ Cancel";
+    } else {
+        form.style.display = "none";
+        button.innerHTML = "✍️ Write a Comment";
+    }
+}
+</script>
+</body>
+</html>

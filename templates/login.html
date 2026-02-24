@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | GreenBlog</title>
+
+  <!-- Link CSS -->
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+  <!-- Login Container -->
+  <div class="auth-container">
+
+    <div class="auth-box">
+      <h2>🍃 Login to GreenBlog</h2>
+      <p>Welcome back! Please enter your details.</p>
+
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if error %}
+            <p class="error-msg">{{ error }}</p>
+        {% endif %}
+        <button type="submit" class="auth-btn">Login</button>
+      </form>
+
+      <div class="auth-link">
+        <p>Don’t have an account?</p>
+        <a href="{% url 'register' %}">Create new account</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
