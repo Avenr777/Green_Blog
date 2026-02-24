@@ -11,7 +11,7 @@ def home(request):
     query = request.GET.get("q")
 
     if query:
-        # 🔍 Search mode
+        #Search mode
         blogs = Blog.objects(
             title__icontains=query
         ).order_by("-created_at")[:6]
@@ -22,7 +22,7 @@ def home(request):
         ).order_by("-likes", "-created_at")[:5]
 
     else:
-        # 🏠 Normal homepage
+        # Normal homepage
         blogs = Blog.objects.order_by("-created_at")[:6]
 
         trending_blogs = Blog.objects(
@@ -91,9 +91,6 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
-def read_view(request):
-
-    return render(request, "read.html")
 def post_view(request, blog_id):
     blog = Blog.objects.get(id=blog_id) #search for the blog with the given id
 

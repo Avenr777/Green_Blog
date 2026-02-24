@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Write Blog | GreenBlog</title>
+  <title>Write Blog | GreenTrail</title>
 
   <!-- Link CSS -->
   <link rel="stylesheet" href="{% static 'style.css' %}">
@@ -15,7 +15,7 @@
 
   <!-- Navbar -->
   <header>
-    <div class="logo">GreenBlog 🍃</div>
+    <div class="logo">GreenTrail 🍃</div>
 
     <div class="auth-buttons">
       <a href="{% url 'home' %}" class="login-btn">🏠 Home</a>
@@ -29,7 +29,7 @@
 
     <div class="write-box">
       <h2>✍️ Write a New Blog</h2>
-      <p>Share your thoughts with the GreenBlog community.</p>
+      <p>Share your thoughts with the GreenTrail community.</p>
 
       <form method="POST">
         {% csrf_token %}
